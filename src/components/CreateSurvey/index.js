@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Materialize from "materialize-css"
-import {Dropdown, Select} from "react-materialize";
 import {Container} from "react-bootstrap";
 import Question from "./Question";
-import Single from "./Single";
 
-const CreateSurvey = ({question}) => {
+const CreateSurvey = ({question, mode}) => {
     const [questionType, setQuestionType] = useState("")
     const handleSelect = (e)=>{
         setQuestionType(e.target.value)
@@ -31,19 +29,31 @@ const CreateSurvey = ({question}) => {
         console.log("published")
     }
 
+    let style
+    if (mode==="night"){
+        style = {
+            "fontSize": "1.5rem",
+            "color": "grey",
+            "backgroundColor": "transparent"
+        }
+    }
+    else{
+        style = {"fontSize": "1.5rem"}
+    }
     useEffect(()=>{
         Materialize.AutoInit()
-    })
+
+    }, [mode])
     return (
         <>
             <Container>
-                <select onChange={handleSelect} id="option">
+                <select className="browser-default" style={style} onChange={handleSelect} id="option">
                     <option selected disabled>Select Question type</option>
                     <option value="multi">Multi-select</option>
                     <option value="single">Single select</option>
                 </select>
             </Container>
-            {questionType!==""?<Question
+            {questionType!==""?<Question mode={mode}
                 addAnswerHandle={addAnswerHandle}
                 removeAnswerHandle={removeAnswerHandle}
                 ans={ans}

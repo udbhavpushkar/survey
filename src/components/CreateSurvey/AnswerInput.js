@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 
-const AnswerInput = ({num, handleRemove})=> {
-
+const AnswerInput = ({num, handleRemove, mode})=> {
+    let style
+    if (mode==="night"){
+        style = {
+            "color": "white"
+        }
+    }else {
+        style = {}
+    }
     const [val, setVal] = useState("")
     const getKey = ()=>{
         handleRemove(num)
@@ -14,7 +21,7 @@ const AnswerInput = ({num, handleRemove})=> {
     return (
         <div className="input-field">
             <i onClick={getKey} className="material-icons prefix red-text">remove_circle_outline</i>
-            <input placeholder="Answer" onChange={handleInputChange} value={val} type="text"/>
+            <input placeholder="Answer" style={style} onChange={handleInputChange} value={val} type="text"/>
         </div>
     );
 };
