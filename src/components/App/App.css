@@ -3,7 +3,9 @@
 }
 
 body{
-  background: floralwhite;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
 }
 
 .App-logo {
@@ -57,4 +59,12 @@ img{
 
 .m-10{
   margin: 10px auto;
+}
+
+.card{
+  opacity: 0.8;
+}
+
+.card:hover{
+  opacity: 1;
 }

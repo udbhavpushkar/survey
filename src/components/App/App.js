@@ -6,14 +6,18 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import React from "react";
+import React, {useState} from "react";
 import CreateSurvey from "../CreateSurvey";
 import TakeSurvey from "../TakeSurvey";
 import Home from "../Home";
-import tiger from '../../tiger.jpg'
+import tiger from '../../tiger2.svg'
 import {Card, Container} from "react-materialize";
 
 function App() {
+
+    const [questions, setQuestions] = useState("")
+
+
   return (
       <div className="App">
           <Router>
@@ -21,13 +25,13 @@ function App() {
                   <Container>
                       <div className="center">
                         <Card>
-                            <img className="m-10" src={tiger} alt="Logo"/>
+                            <img className="m-10 responsive-img" src={tiger} alt="Logo"/>
                               <Switch>
                                   <Route path="/" exact>
                                       <Home/>
                                   </Route>
                                   <Route path="/create">
-                                      <CreateSurvey />
+                                      <CreateSurvey question={questions} />
                                   </Route>
                                   <Route path="/take">
                                       <TakeSurvey />
