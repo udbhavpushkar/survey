@@ -1,32 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Materialize from "materialize-css"
-import {Container} from "react-bootstrap";
-import Question from "./Question";
+import TypeSelector from "./TypeSelector";
+import QuestionInput from "./QuestionInput";
+import AnswerInput from "./AnswerInput";
+import QuestionContext from "../../Context/questions-context";
 
-const CreateSurvey = ({question, mode}) => {
+const CreateSurvey = ({mode}) => {
+    const getRandom = ()=> Math.floor(Math.random()*1000)+1
     const [questionType, setQuestionType] = useState("")
-    const handleSelect = (e)=>{
+    const [questionText, setQuestionText] = useState("");
+    const [options, setOptions] = useState([{id: getRandom(), value: ''}])
+    const questions = useContext(QuestionContext);
+
+    const selectHandler = (e)=>{
         setQuestionType(e.target.value)
     }
-    const [ans, setAns] = useState([1])
-    const addAnswerHandle = ()=>{
-        setAns([...ans, ans[ans.length-1]+1])
+    const addOptionHandler = ()=>{
+        let newOptions = [...options]
+        newOptions.push({id: getRandom(), value: ''})
+        setOptions(newOptions)
     }
-    const removeAnswerHandle = (k)=>{
-        if (ans.length>1){
-            for(let i = 0; i < ans.length; i++){
-                if ( ans[i] === k) {
-                    ans.splice(i, 1);
-                    console.log("yes"+i)
-                }
-            }
-            console.log(ans)
-            setAns([...ans])
-        }
+    const inputQuestionHandler = (e)=>{
+        setQuestionText(e.target.value)
+    }
+    const deleteOptionHandler = (key)=>{
+        let newOptions = options.filter(item=>(item.id!==key))
+        setOptions(newOptions);
+        console.log(key)
+    }
+    const changeOptionHandler = (e, key)=>{
+        const optIndex = options.findIndex(opt=>opt.id===key)
+        const opt = {...options[optIndex]}
+        opt.value = e.target.value;
+        const newOptions = [...options]
+        newOptions[optIndex] = opt
+        setOptions(newOptions)
     }
 
     const handlePublish = ()=>{
-        console.log("published")
+        const ques = {question : questionText, options : options}
+        questions.push(ques)
+        setQuestionText("")
+        setOptions([{id: getRandom(), value: ''}])
     }
 
     let style
@@ -42,25 +57,27 @@ const CreateSurvey = ({question, mode}) => {
     }
     useEffect(()=>{
         Materialize.AutoInit()
+    })
 
-    }, [mode])
     return (
         <>
-            <Container>
-                <select className="browser-default" style={style} onChange={handleSelect} id="option">
-                    <option selected disabled>Select Question type</option>
-                    <option value="multi">Multi-select</option>
-                    <option value="single">Single select</option>
-                </select>
-            </Container>
-            {questionType!==""?<Question mode={mode}
-                addAnswerHandle={addAnswerHandle}
-                removeAnswerHandle={removeAnswerHandle}
-                ans={ans}
-            />:""}
-            {(questionType==="multi" && ans.length>=4) || (questionType==="single" && ans.length>1) ? <button
+            <TypeSelector style={style} handleSelect={selectHandler}/>
+            {questionType!==""?
+                <>
+                    <QuestionInput inputHandler={inputQuestionHandler} val={questionText} mode={mode} />
+                    {options.map(opt=>(
+                        <AnswerInput deleteOpt={()=>deleteOptionHandler(opt.id)} changeHandler={(evt)=>changeOptionHandler(evt, opt.id)} key={opt.id} mode={mode} />
+                    ))}
+
+                    {(questionType === "multi" && options.length < 4) || (questionType === "single" && options.length < 2)?
+                    <i onClick={addOptionHandler} className="material-icons green-text">add_circle_outline</i>:null}
+                </>
+                :null}
+            {(questionType==="multi" && options.length===4) || (questionType==="single" && options.length>1) ?
+                <button
                 onClick={handlePublish}
-                className="btn">Publish</button>:""}
+                className="btn">Add Question</button>:null
+            }
         </>
     );
 };

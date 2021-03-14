@@ -1,10 +1,8 @@
-import logo from '../../logo.svg';
 import './App.css';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+    BrowserRouter as Router,
+    Switch,
+    Route, Link,
 } from "react-router-dom";
 import React, {useState} from "react";
 import CreateSurvey from "../CreateSurvey";
@@ -18,7 +16,6 @@ import {Card, Container, Icon} from "react-materialize";
 function App() {
 
     const [mode, setMode] = useState("day")
-    const [questions, setQuestions] = useState("")
 
     const handleMode = ()=>{
         if (mode==="day"){
@@ -30,13 +27,15 @@ function App() {
         }
     }
 
+
+
   return (
       <div className="App">
           <Router>
               <Container>
-                  <Container>
                       <div className="center">
                         <Card className={mode==="night"?"black white-text":""}>
+                            <Link to="/" className="left"><Icon>home</Icon></Link>
                             {mode==="day"?<div
                                 className="right white black-text"
                                 onClick={handleMode}
@@ -54,7 +53,7 @@ function App() {
                                       <Home/>
                                   </Route>
                                   <Route path="/create">
-                                      <CreateSurvey mode={mode} question={questions} />
+                                      <CreateSurvey mode={mode} />
                                   </Route>
                                   <Route path="/take">
                                       <TakeSurvey />
@@ -63,7 +62,6 @@ function App() {
                         </Card>
                       </div>
                 </Container>
-              </Container>
           </Router>
       </div>
 
