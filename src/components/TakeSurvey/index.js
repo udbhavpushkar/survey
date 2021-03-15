@@ -1,16 +1,24 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import QuestionContext from "../../Context/questions-context";
+import Question from "./Question";
+import {Button, Container, Toast} from "react-bootstrap";
+import Materialize from "materialize-css";
 
 const TakeSurvey = () => {
-    const questions = useContext(QuestionContext);
+    useEffect(()=>{
+        Materialize.AutoInit()
+    })
 
+    const questions = useContext(QuestionContext);
     return (
-        <div>
-            This is take survey page
-            {questions.map(data=>(
-                <p>{data.question}</p>
+        <Container>
+            {questions.map((data, index)=>(
+                <Question num={index} key={index} question={data}/>
             ))}
-        </div>
+            {questions.length>0?
+                <Button onClick={()=>Materialize.toast({html: 'Submitted Successfully'})}>Submit</Button>
+            :null}
+        </Container>
     );
 };
 

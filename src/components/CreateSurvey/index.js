@@ -38,7 +38,7 @@ const CreateSurvey = ({mode}) => {
     }
 
     const handlePublish = ()=>{
-        const ques = {question : questionText, options : options}
+        const ques = {question : questionText, type: questionType ,options : options}
         questions.push(ques)
         setQuestionText("")
         setOptions([{id: getRandom(), value: ''}])
